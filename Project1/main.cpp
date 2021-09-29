@@ -18,15 +18,6 @@ using namespace std;
 
 int main() {
 
-	//lpTaylor Tlr = new Taylor;
-	//Tlr->setAccuracy(0.001);
-	//cout << Tlr->sin(1.57);
-
-
-	//_getch();
-
-
-
 	// command (which function to calculate)
 	WORD cmd;
 	// x variable

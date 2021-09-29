@@ -9,7 +9,7 @@
 
 
 
-// calculation accuracy
+// default calculation accuracy
 #define EPS 0.0001
 
 namespace extFuncs {
