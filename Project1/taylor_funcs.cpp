@@ -1,10 +1,15 @@
 #include "taylor_funcs.h"
 #include <iostream>
+#include <math.h>
 #include "consts.h"
 
 
 
-double tagTaylor::sin(DOUBLE x)
+#define PI 3.14159265358979323846264338327950288419716939937510
+
+
+
+DOUBLE tagTaylor::sin(DOUBLE x)
 {
 
     DOUBLE result = 0.0;
@@ -21,14 +26,14 @@ double tagTaylor::sin(DOUBLE x)
         denominator *= (2.0*i + 2) * (2.0*i + 3.0);
 
         if (fabs(member) < Eps) {
-            return result;
+            return round(result);
         }
 
     }
 
 }
 
-double tagTaylor::cos(DOUBLE x)
+DOUBLE tagTaylor::cos(DOUBLE x)
 {
 
     DOUBLE result = 0.0;
@@ -45,14 +50,14 @@ double tagTaylor::cos(DOUBLE x)
         denominator *= (2.0*i) * (2.0*i - 1.0);
 
         if (fabs(member) < Eps) {
-            return result;
+            return round(result);
         }
 
     }
 
 }
 
-double tagTaylor::ln(DOUBLE x)
+DOUBLE tagTaylor::ln(DOUBLE x)
 {
 
 #ifdef TAYLOR_LN_FORM_1
@@ -148,7 +153,7 @@ double tagTaylor::ln(DOUBLE x)
         result += member;
 
         if (fabs(member) < Eps) {
-            return result;
+            return round(result);
         }
 
     }
@@ -157,7 +162,7 @@ double tagTaylor::ln(DOUBLE x)
 
 }
 
-double tagTaylor::sh(DOUBLE x)
+DOUBLE tagTaylor::sh(DOUBLE x)
 {
 
     DOUBLE result = 0.0;
@@ -174,14 +179,18 @@ double tagTaylor::sh(DOUBLE x)
         denominator *= (2.0*i + 1) * (2.0*i);
 
         if (fabs(member) < Eps) {
-            return result;
+            return round(result);
         }
 
     }
 
 }
 
-int extFuncs::factorial(int x) {
+DOUBLE tagTaylor::round(DOUBLE a) {
+    return floor(a * extFuncs::degree(10.0, EdigitCount)) / extFuncs::degree(10.0, EdigitCount);
+}
+
+INT extFuncs::factorial(INT x) {
 
     if (x < 0) {
         throw "negative argument in factorial function";
@@ -194,13 +203,13 @@ int extFuncs::factorial(int x) {
     return x * factorial(x - 1);
 }
 
-double extFuncs::degree(double x, int n) {
+DOUBLE extFuncs::degree(DOUBLE x, INT n) {
 
     if (n < 0) {
         throw "negative degree in degree function";
     }
 
-    double result = 1;
+    DOUBLE result = 1;
     for (auto i = 0; i < n; i++) {
         result *= x;
     }
@@ -208,13 +217,13 @@ double extFuncs::degree(double x, int n) {
     return result;
 }
 
-double extFuncs::degree(int x, int n) {
+DOUBLE extFuncs::degree(INT x, INT n) {
 
     if (n < 0) {
         throw "negative degree in degree function";
     }
 
-    double result = 1;
+    DOUBLE result = 1;
     for (auto i = 0; i < n; i++) {
         result *= x;
     }
@@ -222,22 +231,40 @@ double extFuncs::degree(int x, int n) {
     return result;
 }
 
-short int extFuncs::negOneDeg(int n) {
+SHORT extFuncs::negOneDeg(INT n) {
     if (n % 2) {
         return -1;
     }
     return 1;
 }
 
+USHORT extFuncs::DigitAfterPoINT(DOUBLE number) {
+
+    DOUBLE fractpart = number - (INT)number;
+    USHORT count = 0u;
+
+    while (fractpart - (INT)fractpart != 0.0) {
+        fractpart *= 10;
+        count++;
+    }
+
+    return count;
+}
+
+DOUBLE extFuncs::Grad2Rad(DOUBLE phi) {
+    return phi * PI / 180.0;
+}
+
 tagTaylor::tagTaylor(DOUBLE a) {
-    this->Eps = a;
+    Eps = a;
+    EdigitCount = extFuncs::DigitAfterPoINT(Eps);
 }
 
 
 void tagTaylor::setAccuracy(DOUBLE a) {
-    this->Eps = a;
+    Eps = a;
+    EdigitCount = extFuncs::DigitAfterPoINT(Eps);
 }
-DOUBLE tagTaylor::getAccuracy()
-{
-    return Eps;
+Accuracy tagTaylor::getAccuracy() {
+    return { Eps, EdigitCount };
 }

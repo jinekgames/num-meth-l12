@@ -6,8 +6,12 @@
 
 
 
+#pragma warning (disable : 4996)
+
 #include <windows.h>
 #include <iostream>
+#include <string>
+#include <sstream>
 #include "conio.h"
 #include "consts.h"
 #include "taylor_funcs.h"
@@ -19,8 +23,10 @@ using namespace std;
 int main() {
 
 	// command (which function to calculate)
-	WORD cmd;
-	// x variable
+	CHAR cmd;
+	// x variable string
+	string cmd1;
+	// x variaxle true
 	DOUBLE x;
 	// function result
 	DOUBLE y;
@@ -35,36 +41,72 @@ int main() {
 		system("cls");
 
 		cout << CHOOSE_FUNC_MSG;
-		cin >> cmd;
-		cout << "\n" << INPUT_X_MSG;
-		cin >> x;
+		cmd = _getch();
+		cout << cmd;
+		if (cmd != 'g') {
+			cout << "\n" << INPUT_X_MSG;
+			cin >> cmd1;
+
+			UINT a, b;
+			CHAR c[30];
+			a = cmd1.find('g');
+			if (a != -1) {
+				// grad
+				size_t l = cmd1.copy(c, a, 0);
+				c[l] = '\0';
+				x = atof(c);
+				// min
+				b = cmd1.find('m');
+				if (b != -1) {
+					l = cmd1.copy(c, b - a, a + 1);
+					c[l] = '\0';
+					x += atof(c) / 60;
+					// sec
+					a = cmd1.find('s');
+					if (b != -1) {
+						l = cmd1.copy(c, a - b, b + 1);
+						c[l] = '\0';
+						x += atof(c) / 3600;
+					}
+				}
+				x = extFuncs::Grad2Rad(x);
+			} else {
+				x = atof(cmd1.c_str());
+			}
+
+		}
 
 		try {
 			switch (cmd) {
 
-			// accuracy
-			case 0u: {
+			// set accuracy
+			case 'a': {
 				Tlr->setAccuracy(x);
 				throw "done";
 			} break;
+			// get accuracy
+			case 'g': {
+				Accuracy a = Tlr->getAccuracy();
+				throw a.Eps;
+			} break;
 
 			// sin
-			case 1u: {
+			case '1': {
 				y = Tlr->sin(x);
 			} break;
 
 			// cos
-			case 2u: {
+			case '2': {
 				y = Tlr->cos(x);
 			} break;
 
 			// ln
-			case 3u: {
+			case '3': {
 				y = Tlr->ln(x);
 			} break;
 
 			// sh
-			case 4u: {
+			case '4': {
 				y = Tlr->sh(x);
 			} break;
 
@@ -74,10 +116,17 @@ int main() {
 
 			}
 
-			cout << endl << "y(x) = " << fixed << y;
+			cout << endl << "y(x) = ";
+			Accuracy accur = Tlr->getAccuracy();
+			cout.precision(accur.DigitCount);
+			cout << fixed << y << " +- " << accur.Eps;
 
 		} catch (const char* e) {
 			cout << "!! " << e;
+		} catch (const char& e) {
+			cout << "!! " << e;
+		} catch (DOUBLE e) {
+			cout << '\n' << e;
 		}
 
 		cout << EXIT_MSG;

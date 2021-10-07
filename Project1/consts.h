@@ -18,7 +18,8 @@
 3	ln(x)\n\
 4	sh(x)\n\
 \n\
-0	set accuracy\n\
+a	set accuracy\n\
+g	get accuracy\n\
 \nInput number here -> "
 
 #define INPUT_X_MSG "Input x value here -> "
