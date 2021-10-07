@@ -27,7 +27,6 @@ int main() {
 
 	// functions class member
 	lpTaylor Tlr = new Taylor;
-	Tlr->setAccuracy(0.0001);
 	
 
 	// main actions
@@ -43,23 +42,29 @@ int main() {
 		try {
 			switch (cmd) {
 
+			// accuracy
+			case 0u: {
+				Tlr->setAccuracy(x);
+				throw "done";
+			} break;
+
 			// sin
-			case 1: {
+			case 1u: {
 				y = Tlr->sin(x);
 			} break;
 
 			// cos
-			case 2: {
+			case 2u: {
 				y = Tlr->cos(x);
 			} break;
 
 			// ln
-			case 3: {
+			case 3u: {
 				y = Tlr->ln(x);
 			} break;
 
 			// sh
-			case 4: {
+			case 4u: {
 				y = Tlr->sh(x);
 			} break;
 
@@ -69,7 +74,7 @@ int main() {
 
 			}
 
-			cout << endl << "y(x) = " << y;
+			cout << endl << "y(x) = " << fixed << y;
 
 		} catch (const char* e) {
 			cout << "!! " << e;
