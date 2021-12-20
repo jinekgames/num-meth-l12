@@ -1,6 +1,7 @@
 #include "taylor_funcs.h"
 #include <iostream>
 #include <math.h>
+#include "../../lab 5/num-meth-l5/lab 5/jnkMath.h"
 #include "consts.h"
 
 
@@ -9,8 +10,10 @@
 
 
 
-DOUBLE tagTaylor::sin(DOUBLE x)
-{
+DOUBLE tagTaylor::sin(DOUBLE x) {
+
+    // from 0
+    // to pi/4
 
     DOUBLE result = 0.0;
     DOUBLE member;
@@ -23,9 +26,9 @@ DOUBLE tagTaylor::sin(DOUBLE x)
         result += member;
 
         numerator *= (-1.0) * x*x;
-        denominator *= (2.0*i + 2) * (2.0*i + 3.0);
+        denominator *= (2.0*i + 2.0) * (2.0*i + 3.0);
 
-        if (fabs(member) < Eps) {
+        if (fabs(numerator / denominator) < Eps) {
             return round(result);
         }
 
@@ -33,8 +36,10 @@ DOUBLE tagTaylor::sin(DOUBLE x)
 
 }
 
-DOUBLE tagTaylor::cos(DOUBLE x)
-{
+DOUBLE tagTaylor::cos(DOUBLE x) {
+
+    // from 0
+    // to pi/4
 
     DOUBLE result = 0.0;
     DOUBLE member;
@@ -57,8 +62,7 @@ DOUBLE tagTaylor::cos(DOUBLE x)
 
 }
 
-DOUBLE tagTaylor::ln(DOUBLE x)
-{
+DOUBLE tagTaylor::ln(DOUBLE x) {
 
 #ifdef TAYLOR_LN_FORM_1
 
@@ -97,15 +101,15 @@ DOUBLE tagTaylor::ln(DOUBLE x)
     if (x < 0.0) {
         throw "negative arguement in ln function";
     }
-    if (x < 2.76) {
-        throw "arguement must be bigger then E (or incorrect calculations using series ln((1+x)/(x-1)))";
+    if (x > e_const) {
+        throw "arguement bigger then E (incorrect calculations using series ln((1+x)/(x-1)))";
     }
     if (x == 1.0) {
         return 0.0;
     }
 
     // original series made for (1+x)/(1-x) arguement
-    x = (x + 1) / (x - 1);
+    x = (x - 1) / (x + 1);
 
     DOUBLE result = 0;
     DOUBLE member;
@@ -120,7 +124,9 @@ DOUBLE tagTaylor::ln(DOUBLE x)
         numerator *= x*x;
         denominator = 2.0*i + 1;
 
-        std::cout << member << "\t" << std::fixed << result*2 << std::endl;
+#ifdef NDEBUG
+        std::cout << member << "\t" << std::fixed << result * 2 << std::endl;
+#endif // NDEBUG
 
         if (fabs(member) < Eps) {
             return result*2;

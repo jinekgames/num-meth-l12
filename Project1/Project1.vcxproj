@@ -143,6 +143,7 @@
     <ClCompile Include="taylor_funcs.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\lab 5\num-meth-l5\lab 5\jnkMath.h" />
     <ClInclude Include="consts.h" />
     <ClInclude Include="taylor_funcs.h" />
   </ItemGroup>

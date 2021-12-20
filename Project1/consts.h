@@ -6,7 +6,7 @@
 
 
 //  choosing Taylor series for ln function
-#define TAYLOR_LN_FORM_3
+#define TAYLOR_LN_FORM_2
 
 
 // strings

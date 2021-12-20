@@ -15,6 +15,7 @@
 #include "conio.h"
 #include "consts.h"
 #include "taylor_funcs.h"
+#include "../../lab 5/num-meth-l5/lab 5/jnkMath.h"
 
 using namespace std;
 
@@ -92,17 +93,117 @@ int main() {
 
 			// sin
 			case '1': {
-				y = Tlr->sin(x);
+
+				// optimisating calculations
+
+				SHORT k = 1;
+
+				// sin(x) = sin(x + 2*pi*k)
+				if (x > 0) {
+					while (x >= 2.0 * pi_const) {
+						x -= 2.0 * pi_const;
+					}
+				} else if (x < 0) {
+					while (x >= 2.0 * pi_const) {
+						x += 2.0 * pi_const;
+					}
+				}
+				// now its 0 < x < 2*pi
+
+				// sin(x) = -sin(-x)
+				if (x > pi_const) {
+					x -= pi_const;
+					k = -1;
+				}
+				// now its 0 < x < pi
+
+
+				// sin(x) = sin(pi - x)
+				if (x > pi_const / 2.0) {
+					x = pi_const - x;
+				}
+				// now its 0 < x < pi/2
+
+				// sin(x) = cos(pi/2 - x)
+				if (x > pi_const / 4) {
+					y = Tlr->cos(pi_const/2.0 - x);
+				} else {
+					y = Tlr->sin(x);
+				}
+
+				y *= k;
+
 			} break;
 
 			// cos
 			case '2': {
-				y = Tlr->cos(x);
+
+				// optimisating calculations
+
+				SHORT k = 1;
+
+				// cos(x) = cos(x + 2*pi*k)
+				if (x > 0) {
+					while (x >= 2.0 * pi_const) {
+						x -= 2.0 * pi_const;
+					}
+				} else if (x < 0) {
+					while (x >= 2.0 * pi_const) {
+						x += 2.0 * pi_const;
+					}
+				}
+				// now its 0 < x < 2*pi
+
+				// cos(x) = cos(-x)
+				if (x > pi_const) {
+					x -= pi_const;
+				}
+				// now its 0 < x < pi
+
+
+				// cos(x) = -cos(pi - x)
+				if (x > pi_const / 2.0) {
+					x = pi_const - x;
+					k = -1;
+				}
+				// now its 0 < x < pi/2
+
+				// cos(x) = sin(pi/2 - x)
+				if (x > pi_const / 4) {
+					y = Tlr->sin(pi_const / 2.0 - x);
+				}
+				else {
+					y = Tlr->cos(x);
+				}
+
+				y *= k;
+
 			} break;
 
 			// ln
 			case '3': {
-				y = Tlr->ln(x);
+
+				// optimisating calculations
+
+				SHORT k = 0;
+
+				if (x > 1.0) {
+					while (x > 2.0) {
+						x /= 2.0;
+						k++;
+					}
+				} else if (x > 0.0) {
+					while (x < 1.0) {
+						x *= 2.0;
+						k--;
+					}
+				} else {
+					throw "incorrect ln(x) value";
+				}
+				// now its 1 <= x <= 2
+
+				y = Tlr->ln(x) + k * Tlr->ln(2);
+
 			} break;
 
 			// sh

@@ -29,5 +29,8 @@
     <ClInclude Include="taylor_funcs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\lab 5\num-meth-l5\lab 5\jnkMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
